@@ -1,4 +1,6 @@
-﻿namespace MovingCat;
+﻿using System.Reflection.Metadata.Ecma335;
+
+namespace MovingCat;
 
 internal class Program
 {
@@ -10,11 +12,11 @@ internal class Program
         var box = new Box(ref start, ref amount);
         var cat = Box.AsignCatToOneOfBoxes(amount, box);
         var firstCat = Box.FindFirstCatForReference(cat);
-        var (found, ammount, catBox) = CatGame(box, cat);
+        var catGameDetails = CatGame(box, cat);
 
-        if (found.Equals(true))
+        if (catGameDetails.CatWasFound.Equals(true))
         {
-            Console.WriteLine($"Cat was found in {ammount} moves at {catBox}");
+            Console.WriteLine($"Cat was found in {catGameDetails.AmountOfMoves} moves at {catGameDetails.BoxNumber}");
             Console.WriteLine($"FirstCat original was in {firstCat.BoxNumber}");
         }
         else
@@ -23,25 +25,28 @@ internal class Program
         }
     }
 
-    private static (bool, int, int) CatGame(Box box, Box? catBox)
+    private static CatGameDetails CatGame(Box box, Box? catBox)
     {
         var amountOfMoves = 0;
 
         while (box.Next != null)
         {
             amountOfMoves++;
+
             if (Box.LookForCat(box))
             {
-                return (true, amountOfMoves, box.BoxNumber);
+                return new CatGameDetails(amountOfMoves, box.BoxNumber, true);
             }
 
             catBox = Box.MoveCat(catBox);
+
             if (box.BoxNumber % 2 == 0)
             {
                 amountOfMoves++;
+
                 if (Box.LookForCat(box))
                 {
-                    return (true, amountOfMoves, box.BoxNumber);
+                    return new CatGameDetails(amountOfMoves, box.BoxNumber, true);
                 }
             }
 
@@ -51,15 +56,16 @@ internal class Program
         while (box.BoxNumber != 0)
         {
             box = box.Before;
+
             if (Box.LookForCat(box))
             {
-                return (true, amountOfMoves, box.BoxNumber);
+                return new CatGameDetails(amountOfMoves, box.BoxNumber, true);
             }
 
             catBox = Box.MoveCat(catBox);
             amountOfMoves++;
         }
 
-        return (false, 0, 0);
+        return new CatGameDetails(amountOfMoves, box.BoxNumber, false);
     }
 }
