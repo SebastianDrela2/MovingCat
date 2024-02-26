@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata.Ecma335;
-
-namespace MovingCat;
+﻿namespace MovingCat;
 
 internal class Program
 {
