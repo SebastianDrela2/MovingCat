@@ -10,7 +10,7 @@ internal class Program
         var box = new Box(ref start, ref amount);
         var cat = Box.AsignCatToOneOfBoxes(amount, box);
         var firstCat = Box.FindFirstCatForReference(cat);
-        var (found, ammount, catBox) = CatGame(ref box, ref cat);
+        var (found, ammount, catBox) = CatGame(box, cat);
 
         if (found.Equals(true))
         {
@@ -23,7 +23,7 @@ internal class Program
         }
     }
 
-    private static (bool, int, int) CatGame(ref Box box, ref Box? catBox)
+    private static (bool, int, int) CatGame(Box box, Box? catBox)
     {
         var amountOfMoves = 0;
 
